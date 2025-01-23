@@ -4,4 +4,6 @@ version = "0.1.0"
 description = "Analyze weblogs to filter IPs with specific patterns and add rules to Windows Firewall."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "dearpygui>=2.0.0",
+]
