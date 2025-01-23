@@ -24,7 +24,6 @@ class MainWindow:
         dpg.set_primary_window(dpg.last_container(), True)
         dpg.create_viewport(title='win pirewall', width=1200, height=600)
         dpg.setup_dearpygui()
-        dpg.show_viewport()
         
     def run(self):
         try:
