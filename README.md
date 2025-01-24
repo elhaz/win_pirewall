@@ -10,4 +10,4 @@ description | script
 --- | ---
 download package | `uv sync`
 run script | `uv run main.py`
-debug | `uv run watcher.py`
+debug | `nodemon`

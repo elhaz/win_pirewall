@@ -1,0 +1,6 @@
+{
+    "exec": "uv run main.py",
+    "ext": "py",
+    "watch": ["*.*"],
+    "ignore": []
+}
