@@ -1,0 +1,10 @@
+{
+    "x": 100,
+    "y": 100,
+    "width": 1200,
+    "height": 600,
+    "is_viewport_always_top": false,
+    "is_viewport_resizable": false,
+    "is_viewport_decorated": false,
+    "is_viewport_vsync_on": false
+}
