@@ -5,17 +5,15 @@ import sys
 import dearpygui.dearpygui as dpg
 import signal
 
-
 # 한글 폰트 설정입니다.
-from src.controllers.set_lang import set_kor
+from src.controllers.set_lang import set_kor_lang
 
 class MainWindow:
     def __init__(self):
         self.window_config_file = Path("window_config.json")
         self.default_config = json.loads(Path("resources/default_window_config.json").read_text())
-        
         dpg.create_context()
-        set_kor()
+        set_kor_lang()
         
         # 저장된 창 설정 불러오기
         self.config = self.load_window_config()

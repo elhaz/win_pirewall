@@ -1,7 +1,7 @@
 from pathlib import Path
 import dearpygui.dearpygui as dpg
 
-def set_kor():
+def set_kor_lang():
     # NanumGothic.ttf 파일 경로
     FONT_PATH = str(Path(__file__).parent.parent.parent / "resources" / "NanumGothic.ttf")
 
