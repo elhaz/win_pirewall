@@ -20,15 +20,39 @@ class MainWindow:
         # 저장된 창 설정 불러오기
         self.config = self.load_window_config()
 
-        with dpg.window(tag="Main Window", label="윈도우 방화벽"):
-            dpg.add_text("Hello, Dear PyGui!!")
-            dpg.add_text("안녕하세요, 디어 파이구이!!")  
+        with dpg.window(tag="main_window", label="윈도우 방화벽"):
+            # 메뉴바 
+            with dpg.menu_bar(tag="main_menu_bar"):
+                
+                with dpg.menu(label="파일"):
+                    dpg.add_menu_item(label="새로 만들기", callback=lambda: print("새로 만들기"))
+                    dpg.add_menu_item(label="열기", callback=lambda: print("열기"))
+                    dpg.add_menu_item(label="저장", callback=lambda: print("저장"))
+                    dpg.add_menu_item(label="종료", callback=lambda: dpg.stop_dearpygui())
+                with dpg.menu(label="편집"):
+                    dpg.add_menu_item(label="복사", callback=lambda: print("복사"))
+                    dpg.add_menu_item(label="붙여넣기", callback=lambda: print("붙여넣기"))
+                    dpg.add_menu_item(label="잘라내기", callback=lambda: print("잘라내기"))
+                with dpg.menu(label="도움말"):
+                    dpg.add_menu_item(label="정보", callback=lambda: print("정보"))
+                    
+            # 메뉴바 더블클릭 시 최대화
             
-            dpg.add_button(label="저장")
-            dpg.add_button(label="열기")
-            dpg.add_button(label="닫기")
+            # 탭바
+            with dpg.tab_bar():
+                with dpg.tab(label="기본설정"):
+                    dpg.add_text("기본설정")
+                with dpg.tab(label="포트설정"):
+                    dpg.add_text("포트설정")
+                with dpg.tab(label="프로그램설정"):
+                    dpg.add_text("프로그램설정")
+                with dpg.tab(label="로그"):
+                    dpg.add_text("로그")
+            
+                
+            
 
-        dpg.set_primary_window(dpg.last_container(), True)
+        dpg.set_primary_window("main_window", True)
         
         # 저장된 위치와 크기로 viewport 생성
         dpg.create_viewport(
@@ -47,7 +71,8 @@ class MainWindow:
         # 프로그램 종료 시 cleanup 실행
         atexit.register(self.cleanup)  
         
-        
+    
+            
     def setup_signal_handlers(self):
         """
         SIGINT 및 SIGTERM 신호에 대한 핸들러를 설정합니다.
