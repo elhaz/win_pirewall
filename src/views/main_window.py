@@ -18,8 +18,8 @@ class MainWindow:
         # 저장된 창 설정 불러오기
         self.config = self.load_window_config()
         self.WSIZE = {
-            "SETTING": 350,
-            "DB": 350,
+            "PATH_SET": 350,
+            "LIST_SET": 350,
         }
 
         with dpg.window(tag="main_window", label="윈도우 방화벽"):
@@ -27,7 +27,7 @@ class MainWindow:
             # 좌우로 그룹 분리
             with dpg.group(horizontal=True):
                 
-                with dpg.child_window(tag="settings", width=self.WSIZE["SETTING"], delay_search=True):
+                with dpg.child_window(tag="path_set", width=self.WSIZE["PATH_SET"], delay_search=True):
                     with dpg.group():
                         
                         dpg.add_text("프로그램 설정")
@@ -52,18 +52,31 @@ class MainWindow:
                         dpg.add_separator()
                         dpg.add_separator()
                         
+                        dpg.add_text("DEBUG")
+                        dpg.add_button(
+                            label="제외목록에 더미추가", 
+                            callback=self.debug.add_dummy_exclude
+                        )
+                        dpg.add_separator()
+                        dpg.add_separator()
+                        
                             
                         
-                with dpg.child_window(tag="db", width=self.WSIZE["DB"], delay_search=True):
+                with dpg.child_window(tag="list_set", width=self.WSIZE["LIST_SET"], delay_search=True):
                     # 탭 - [제외목록, 안티패턴, 차단목록]
-                    with dpg.tab_bar():
-                        with dpg.tab(label="제외목록"):
+                    with dpg.tab_bar(tag="tab_bar"):
+                        with dpg.tab(label="제외목록", tag="tab_exclude"):
+                            
                             # 제외목록 입력, 추가버튼
                             with dpg.group(horizontal=True):
                                 dpg.add_input_text(hint="제외패턴")
                                 dpg.add_button(label="추가")
+                                # 작은 텍스트. 제외목록의 테이블에 표시된 요소의 갯수.
+                                dpg.add_text(label="0", tag="exclude_count")
+                                
                             # 제외목록 테이블. 목록의 각 요소에 대하여 마우스오버시 삭제버튼 표시
                             with dpg.table(
+                                tag="exclude_table",
                                 header_row=False, 
                                 no_host_extendX=True, 
                                 no_host_extendY=True,
@@ -73,20 +86,22 @@ class MainWindow:
                                 context_menu_in_body=True, row_background=True,
                                 policy=dpg.mvTable_SizingFixedFit, 
                                 height=-1, scrollY=True):
-                                dpg.add_table_column(label="", init_width_or_weight=280)
-                                dpg.add_table_column(label="")
-                                for _ in range(100):
-                                    with dpg.table_row():
-                                        dpg.add_text("제외패턴")
-                                        dpg.add_button(label=" X ")
+                                
+                                dpg.add_table_column(label="target", init_width_or_weight=280)
+                                dpg.add_table_column(label="delete")
                                 
                             
+                                    
                         with dpg.tab(label="안티패턴"):
                             dpg.add_input_text(label="안티패턴", hint="안티패턴")
+                            
                         with dpg.tab(label="차단목록"):
                             dpg.add_input_text(label="차단목록", hint="차단목록")
                     
-                    
+                    # tab_bar 내의 tab label 을 각 tab의 label 길이에 맞게 조정
+                    # dpg.set_item_width("tab_exclude", 100)
+                    # dpg.set_item_width("tab_anti", 100)
+                    # dpg.set_item_width("tab_block", 100)
                     
                         
                 with dpg.child_window(autosize_x=True, delay_search=True):
@@ -233,3 +248,18 @@ class MainWindow:
             print(f"실행 중 오류 발생: {str(e)}")
         finally:
             self.cleanup()
+            
+    class debug:
+        @staticmethod
+        def add_dummy_exclude():
+            """
+            제외목록에 더미 데이터를 추가합니다.
+            """
+            print("더미 데이터 추가")
+            # exclude_table 에 1row 추가
+            with dpg.table_row(parent="exclude_table"):
+                dpg.add_text("dummy")
+                dpg.add_button(label="delete")
+            
+            
+    

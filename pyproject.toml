@@ -5,6 +5,8 @@ description = "Analyze weblogs to filter IPs with specific patterns and add rule
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
-    "dearpygui>=2.0.0", # for GUI
-    "pywin32>=308", # for controll windows firewall
+    # for GUI
+    "dearpygui>=2.0.0",
+    # for controll windows firewall
+    "pywin32>=308",
 ]
