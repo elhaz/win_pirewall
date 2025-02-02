@@ -17,39 +17,84 @@ class MainWindow:
         
         # 저장된 창 설정 불러오기
         self.config = self.load_window_config()
+        self.WSIZE = {
+            "SETTING": 350,
+            "DB": 350,
+        }
 
         with dpg.window(tag="main_window", label="윈도우 방화벽"):
-            # 메뉴바 
-            with dpg.menu_bar(tag="main_menu_bar"):
+            
+            # 좌우로 그룹 분리
+            with dpg.group(horizontal=True):
                 
-                with dpg.menu(label="파일"):
-                    dpg.add_menu_item(label="새로 만들기", callback=lambda: print("새로 만들기"))
-                    dpg.add_menu_item(label="열기", callback=lambda: print("열기"))
-                    dpg.add_menu_item(label="저장", callback=lambda: print("저장"))
-                    dpg.add_menu_item(label="종료", callback=lambda: dpg.stop_dearpygui())
-                with dpg.menu(label="편집"):
-                    dpg.add_menu_item(label="복사", callback=lambda: print("복사"))
-                    dpg.add_menu_item(label="붙여넣기", callback=lambda: print("붙여넣기"))
-                    dpg.add_menu_item(label="잘라내기", callback=lambda: print("잘라내기"))
-                with dpg.menu(label="도움말"):
-                    dpg.add_menu_item(label="정보", callback=lambda: print("정보"))
+                with dpg.child_window(tag="settings", width=self.WSIZE["SETTING"], delay_search=True):
+                    with dpg.group():
+                        
+                        dpg.add_text("프로그램 설정")
+                        dpg.add_input_text(label="Rule Key", hint="Rule Key")
+                        dpg.add_input_text(label="Log Path", hint="..\\access.log")
+                        dpg.add_separator()
+                        dpg.add_separator()
+                        
+                        dpg.add_text("Export")
+                        with dpg.group(horizontal=True):
+                            dpg.add_button(label="제외패턴")
+                            dpg.add_button(label="안티패턴")
+                            dpg.add_button(label="차단목록")
+                        dpg.add_separator()
+                        dpg.add_separator()
+                        
+                        dpg.add_text("Import")
+                        with dpg.group(horizontal=True):
+                            dpg.add_button(label="제외패턴")
+                            dpg.add_button(label="안티패턴")
+                            dpg.add_button(label="차단목록")
+                        dpg.add_separator()
+                        dpg.add_separator()
+                        
+                            
+                        
+                with dpg.child_window(tag="db", width=self.WSIZE["DB"], delay_search=True):
+                    # 탭 - [제외목록, 안티패턴, 차단목록]
+                    with dpg.tab_bar():
+                        with dpg.tab(label="제외목록"):
+                            # 제외목록 입력, 추가버튼
+                            with dpg.group(horizontal=True):
+                                dpg.add_input_text(hint="제외패턴")
+                                dpg.add_button(label="추가")
+                            # 제외목록 테이블. 목록의 각 요소에 대하여 마우스오버시 삭제버튼 표시
+                            with dpg.table(
+                                header_row=False, 
+                                no_host_extendX=True, 
+                                no_host_extendY=True,
+                                delay_search=True,
+                                borders_innerH=True, borders_outerH=True, 
+                                borders_innerV=False,borders_outerV=True, 
+                                context_menu_in_body=True, row_background=True,
+                                policy=dpg.mvTable_SizingFixedFit, 
+                                height=-1, scrollY=True):
+                                dpg.add_table_column(label="", init_width_or_weight=280)
+                                dpg.add_table_column(label="")
+                                for _ in range(100):
+                                    with dpg.table_row():
+                                        dpg.add_text("제외패턴")
+                                        dpg.add_button(label=" X ")
+                                
+                            
+                        with dpg.tab(label="안티패턴"):
+                            dpg.add_input_text(label="안티패턴", hint="안티패턴")
+                        with dpg.tab(label="차단목록"):
+                            dpg.add_input_text(label="차단목록", hint="차단목록")
                     
-            # 메뉴바 더블클릭 시 최대화
-            
-            # 탭바
-            with dpg.tab_bar():
-                with dpg.tab(label="기본설정"):
-                    dpg.add_text("기본설정")
-                with dpg.tab(label="포트설정"):
-                    dpg.add_text("포트설정")
-                with dpg.tab(label="프로그램설정"):
-                    dpg.add_text("프로그램설정")
-                with dpg.tab(label="로그"):
-                    dpg.add_text("로그")
-            
+                    
+                    
+                        
+                with dpg.child_window(autosize_x=True, delay_search=True):
+                    dpg.add_input_text(tag="logbox", multiline=True, height=-1, width=-1, readonly=True)
+                    
+                    
                 
             
-
         dpg.set_primary_window("main_window", True)
         
         # 저장된 위치와 크기로 viewport 생성
@@ -69,8 +114,6 @@ class MainWindow:
         # 프로그램 종료 시 cleanup 실행
         atexit.register(self.cleanup)  
         
-    
-            
     def setup_signal_handlers(self):
         """
         SIGINT 및 SIGTERM 신호에 대한 핸들러를 설정합니다.

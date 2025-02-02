@@ -1,10 +1,10 @@
 {
-    "x": 504,
-    "y": -829,
+    "x": 317,
+    "y": -833,
     "width": 1200,
     "height": 600,
     "is_viewport_always_top": true,
     "is_viewport_resizable": true,
-    "is_viewport_decorated": false,
+    "is_viewport_decorated": true,
     "is_viewport_vsync_on": true
 }
